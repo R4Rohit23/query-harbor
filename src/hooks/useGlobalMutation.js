@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useCookie from "./useCookie";
 import { APIHandler } from "./apiHandler";
 
-const useGlobalMutation = ({
+export const useGlobalMutation = ({
     url,
     queriesToInvalidate,
     methodType,
@@ -169,5 +169,3 @@ const useGlobalMutation = ({
         isMutationSucceeded: mutation.isSuccess,
     };
 };
-
-export default useGlobalMutation;

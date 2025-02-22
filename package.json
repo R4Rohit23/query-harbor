@@ -1,8 +1,24 @@
 {
-  "name": "react-query-hooks",
-  "private": true,
-  "version": "0.0.0",
+  "name": "query-harbor",
+  "version": "0.0.2",
   "type": "module",
+  "files": ["dist"],
+  "main": "./dist/query-harbor.umd.js",
+  "module": "./dist/query-harbor.es.js",
+  "keywords": ["react", "react-query", "hooks", "tanstack", "query", "react-hooks", "harbor", "query-harbor", "react-query-hooks", "custom-hooks"],
+  "author": "Rohit Chaware",
+  "license": "MIT",
+  "description": "A React Query utility package for efficient data fetching and caching",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/R4Rohit23/react-query-hooks"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/query-harbor.es.js",
+      "require": "./dist/query-harbor.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

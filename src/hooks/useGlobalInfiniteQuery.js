@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { APIHandler } from "./apiHandler";
 import useCookie from "./useCookie";
 
-const useGlobalInfiniteQuery = ({
+export const useGlobalInfiniteQuery = ({
     url,
     queryKey,
     methodType,
@@ -81,5 +81,3 @@ const useGlobalInfiniteQuery = ({
         totalCount,
     };
 };
-
-export default useGlobalInfiniteQuery;

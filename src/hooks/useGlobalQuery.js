@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useCookie from "./useCookie";
 
-const useGlobalQuery = ({
+export const useGlobalQuery = ({
     url,
     queryKey,
     methodType,
@@ -58,5 +58,3 @@ const useGlobalQuery = ({
         error: query.error,
     };
 };
-
-export default useGlobalQuery;
