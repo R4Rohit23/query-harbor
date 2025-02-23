@@ -1,7 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useCookie from "./useCookie";
+import { useCookie } from "./useCookie";
 import { APIHandler } from "./apiHandler";
 
+/**
+ * Custom hook for handling global mutations with React Query.
+ * @param {Object} params - The parameters for the mutation.
+ * @param {string} params.url - The endpoint URL for the mutation.
+ * @param {Array<string>} params.queriesToInvalidate - Array of query keys to invalidate after successful mutation.
+ * @param {string} params.methodType - The HTTP method type (POST, PUT, DELETE).
+ * @param {Object} [params.data] - The default data to be sent with the mutation.
+ * @param {boolean} [params.isFormData] - Whether the data should be processed as FormData.
+ * @param {Function} [params.closePopup] - Optional callback to close a popup after successful mutation.
+ * @param {Array<string>} [params.excludedIndexKeys] - Keys for which array indices should not be included in FormData.
+ * @returns {Object} An object containing mutation-related functions and state.
+ */
 export const useGlobalMutation = ({
     url,
     queriesToInvalidate,
@@ -12,22 +24,45 @@ export const useGlobalMutation = ({
     excludedIndexKeys,
 }) => {
     const queryClient = useQueryClient();
-    const { cookie } = useCookie({ cookieName: "accessToken"});
 
+    /**
+     * Custom hook to get access token from cookies.
+     * @type {Object}
+     * @property {Object} cookie - The cookie object containing the access token.
+     */
+    const { cookie } = useCookie({ cookieName: "accessToken" });
+
+    /**
+     * Headers object for the API request.
+     * Automatically includes Authorization header if access token is available.
+     * @type {Object}
+     */
     let headers = {};
 
     if (cookie?.accessToken) {
         headers = { Authorization: `Bearer ${cookie?.accessToken}` };
     }
 
+    /**
+     * React Query mutation hook configuration.
+     * Handles data mutations, cache invalidation, and error management.
+     */
     const mutation = useMutation({
+        /**
+         * Mutation function that processes and sends data to the API.
+         * @async
+         * @param {Object} params - Mutation parameters.
+         * @param {boolean} [params.isPriorityDataAvailable] - Whether to use priority data.
+         * @param {*} [params.priorityData] - Priority data to override default data.
+         * @returns {Promise<*>} The response data from the API.
+         * @throws {Error} If the API request fails.
+         */
         mutationFn: async ({ isPriorityDataAvailable, priorityData }) => {
             const dataToUpload = isPriorityDataAvailable ? priorityData : data;
 
             if (isFormData) {
                 let formData = new FormData();
 
-                // Recursive function to append data to FormData
                 const appendToFormData = (
                     formData,
                     data,
@@ -54,16 +89,13 @@ export const useGlobalMutation = ({
                                 typeof item === "object" &&
                                 item !== null
                             ) {
-                                // Recursively handle nested objects in array
                                 appendToFormData(formData, item, key, options);
                             } else {
                                 formData?.append(key, item);
                             }
                         });
                     } else if (typeof data === "object" && data !== null) {
-                        // Handle nested objects
                         if (data instanceof File) {
-                            // Append file object directly
                             formData.append(parentKey, data);
                         } else {
                             Object.keys(data).forEach((key) => {
@@ -85,7 +117,6 @@ export const useGlobalMutation = ({
                         data !== undefined &&
                         data !== null
                     ) {
-                        // Append primitive values
                         formData?.append(parentKey, data);
                     }
                 };
@@ -94,7 +125,6 @@ export const useGlobalMutation = ({
                     excludedIndexKeys,
                 };
 
-                // Append all existing data
                 Object.keys(dataToUpload).forEach((key) => {
                     appendToFormData(formData, dataToUpload[key], key, options);
                 });
@@ -136,11 +166,21 @@ export const useGlobalMutation = ({
                 }
             }
         },
+
+        /**
+         * Callback executed on successful mutation.
+         * Invalidates specified queries and closes popup if provided.
+         */
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: queriesToInvalidate });
             closePopup && closePopup(false);
         },
 
+        /**
+         * Callback executed on mutation error.
+         * @param {Error} error - The error object from the failed mutation.
+         * @returns {string} The error message.
+         */
         onError: (error) => {
             console.log("mutationError", error?.message);
             return error?.message;
