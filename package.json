@@ -1,11 +1,25 @@
 {
   "name": "query-harbor",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "type": "module",
-  "files": ["dist"],
-  "main": "./dist/query-harbor.umd.js",
-  "module": "./dist/query-harbor.es.js",
-  "keywords": ["react", "react-query", "hooks", "tanstack", "query", "react-hooks", "harbor", "query-harbor", "react-query-hooks", "custom-hooks"],
+  "files": [
+    "dist"
+  ],
+  "main": "dist/query-harbor.umd.js",
+  "module": "dist/query-harbor.es.js",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "react",
+    "react-query",
+    "hooks",
+    "tanstack",
+    "query",
+    "react-hooks",
+    "harbor",
+    "query-harbor",
+    "react-query-hooks",
+    "custom-hooks"
+  ],
   "author": "Rohit Chaware",
   "license": "MIT",
   "description": "A React Query utility package for efficient data fetching and caching",
@@ -42,6 +56,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
-    "vite": "^6.1.0"
+    "vite": "^6.1.0",
+    "vite-plugin-dts": "^4.5.0"
   }
 }
